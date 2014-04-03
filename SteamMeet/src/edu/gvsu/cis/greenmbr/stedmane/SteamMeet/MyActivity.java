@@ -19,7 +19,13 @@ public class MyActivity extends Activity {
     // Called when the activity is first created.
     TextView profile, user, clanID, state;
     ImageView avatar;
-    TextView abc;
+/*
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("");
+    }
+*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +46,7 @@ public class MyActivity extends Activity {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
-                        "4321147&steamids=76561198046688891");
+                        "4321147&steamids=76#$98046688891");
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
