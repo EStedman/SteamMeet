@@ -18,7 +18,7 @@ import java.util.Scanner;
 public class MyActivity extends Activity {
     // Called when the activity is first created.
     TextView profile, user, clanID, state;
-    ImageView avatar; //
+    ImageView avatar; //Testing commit
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
