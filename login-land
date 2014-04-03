@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView android:layout_width="127dp" android:layout_height="37dp" android:text="Enter Steam ID:"
+              android:id="@+id/textView" android:textSize="18dp"
+              android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="What's that?"
+            android:id="@+id/button"
+            android:layout_below="@+id/textView" android:layout_alignLeft="@+id/textView"/>
+    <EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:inputType="number"
+              android:ems="10" android:id="@+id/editText" android:text="Enter here"
+              android:layout_gravity="center_horizontal"
+              android:layout_marginTop="36dp"
+              android:layout_below="@+id/button" android:layout_centerHorizontal="true"/>
+    <Button android:id="@+id/button2"
+            android:layout_gravity="center_horizontal" android:layout_height="wrap_content"
+            android:layout_width="wrap_content" android:text="Confirm"
+            android:layout_below="@+id/editText" android:layout_centerHorizontal="true"
+            android:layout_marginTop="39dp"/>
+</RelativeLayout>
