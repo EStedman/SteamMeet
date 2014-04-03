@@ -1,6 +1,7 @@
 package edu.gvsu.cis.greenmbr.stedmane.SteamMeet;
 
 import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -8,7 +9,6 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -18,27 +18,42 @@ import java.util.Scanner;
 public class MyActivity extends Activity {
     // Called when the activity is first created.
     TextView profile, user, clanID, state;
+    String userSave, profileSave, clanSave, stateSave;
     ImageView avatar;
-/*
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("");
-    }
-*/
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.profileview);
         user = (TextView) findViewById(R.id.persona);
         profile = (TextView) findViewById(R.id.profileSite);
         state = (TextView) findViewById(R.id.activeState);
         clanID = (TextView) findViewById(R.id.clan);
         avatar = (ImageView) findViewById(R.id.imageView);
-        new ProfileTask().execute();
+        if(savedInstanceState != null){
+            userSave = savedInstanceState.getString("UserSave");
+            profileSave = savedInstanceState.getString("ProfileSave");
+            clanSave = savedInstanceState.getString("ClanSave");
+            stateSave = savedInstanceState.getString("StateSave");
+            user.setText(userSave);
+            profile.setText(profileSave);
+            clanID.setText(clanSave);
+            state.setText(stateSave);
+            new imageTask().execute();
+        }
+        else
+            new ProfileTask().execute();
     }
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("UserSave", user.getText().toString());
+        outState.putString("ProfileSave", profile.getText().toString());
+        outState.putString("ClanSave", clanID.getText().toString());
+        outState.putString("StateSave", state.getText().toString());
+    }
     private class ProfileTask extends AsyncTask<Void, Integer, JSONObject> {
+        private Drawable avatarImg;
         @Override
         protected JSONObject doInBackground(Void... params) {
             URL profileURL = null;
@@ -46,7 +61,7 @@ public class MyActivity extends Activity {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
-                        "4321147&steamids=76#$98046688891");
+                        "4321147&steamids=76561198046688891");
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
@@ -56,6 +71,9 @@ public class MyActivity extends Activity {
                 JSONObject arr = new JSONObject(out);
                 JSONArray obj = (arr.getJSONObject("response")).getJSONArray("players");
                 JSONObject profileObj = obj.getJSONObject(0);
+                String avatarString = profileObj.getString("avatarfull");
+                URL avatarURL = new URL(avatarString);
+                avatarImg = Drawable.createFromStream(avatarURL.openStream(), "Picture");
                 return profileObj;
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -68,24 +86,13 @@ public class MyActivity extends Activity {
         }
 
         @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject profileFirst) {
+        protected void onPostExecute(JSONObject profileData) {
             try {
-                String userTemp = profileFirst.getString("personaname");
-                String profTemp = profileFirst.getString("profileurl");
-                String clanTemp = profileFirst.getString("primaryclanid");
-                int stateTemp = profileFirst.getInt("personastate");
-
-                /*
-                String avatarURL = profileFirst.getString("avatarmedium");
-                URL imgUrl = new URL(avatarURL);
-                Drawable avatarTemp = Drawable.createFromStream(imgUrl.openStream(), "Picture");
-                avatar.setImageDrawable(avatarTemp);
-                */
+                String userTemp = profileData.getString("personaname");
+                String profTemp = profileData.getString("profileurl");
+                String clanTemp = profileData.getString("primaryclanid");
+                int stateTemp = profileData.getInt("personastate");
+                avatar.setImageDrawable(avatarImg);
 
                 user.setText("User Name: " + userTemp);
                 profile.setText("Steam Profile: " + profTemp);
@@ -106,12 +113,45 @@ public class MyActivity extends Activity {
                     state.setText("State: Offline");
             } catch (JSONException e) {
                 e.printStackTrace();
-            }/* catch (MalformedURLException e) {
+            }
+        }
+    }
+    private class imageTask extends AsyncTask<Void, Integer, Void> {
+        Drawable avatar2;
+        @Override
+        protected Void doInBackground(Void... params) {
+            URL profileURL = null;
+            try {
+                profileURL = new URL("http://api.steampowered.com/" +
+                        "ISteamUser/GetPlayerSummaries/v00" +
+                        "02/?key=A35259FADACBD1E99D1101AD8" +
+                        "4321147&steamids=76561198046688891");
+                String out = "";
+                HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
+                Scanner scan = new Scanner(conn.getInputStream());
+                while (scan.hasNextLine()) {
+                    out += scan.nextLine();
+                }
+                JSONObject arr = new JSONObject(out);
+                JSONArray obj = (arr.getJSONObject("response")).getJSONArray("players");
+                JSONObject profileObj = obj.getJSONObject(0);
+                String avatarString = profileObj.getString("avatarfull");
+                URL avatarURL = new URL(avatarString);
+                avatar2 = Drawable.createFromStream(avatarURL.openStream(), "Picture");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }*/
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            avatar.setImageDrawable(avatar2);
         }
     }
 }
-
