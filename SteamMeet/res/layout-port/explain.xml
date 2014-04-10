@@ -21,4 +21,4 @@
             android:layout_height="130dp"
             android:text='3. Enter the whole URL from step 2 into the site "steamfinderid.com" and hit the search button. \n 4. Enter the output from step 3 as the input for another search. \n 5. The output from step 4 will be your steam ID. Return to the previous page.'
             android:id="@+id/textView3" android:textSize="14dp"/>
-<
+</LinearLayout>
