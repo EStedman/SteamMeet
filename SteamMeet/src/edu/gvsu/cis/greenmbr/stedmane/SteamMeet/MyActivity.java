@@ -1,6 +1,7 @@
 package edu.gvsu.cis.greenmbr.stedmane.SteamMeet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ public class MyActivity extends Activity {
     TextView profile, user, clanID, state;
     String userSave, profileSave, clanSave, stateSave;
     ImageView avatar;
+    private String profNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class MyActivity extends Activity {
         state = (TextView) findViewById(R.id.activeState);
         clanID = (TextView) findViewById(R.id.clan);
         avatar = (ImageView) findViewById(R.id.imageView);
+        Intent intented = getIntent();
+        String profNumber = intented.getStringExtra("storage");
         if(savedInstanceState != null){
             userSave = savedInstanceState.getString("UserSave");
             profileSave = savedInstanceState.getString("ProfileSave");
@@ -61,7 +65,7 @@ public class MyActivity extends Activity {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
-                        "4321147&steamids=76561198046688891");
+                        "4321147&steamids=" + profNumber);
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
