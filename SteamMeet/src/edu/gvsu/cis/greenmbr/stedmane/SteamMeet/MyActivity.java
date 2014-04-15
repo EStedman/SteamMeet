@@ -33,7 +33,7 @@ public class MyActivity extends Activity {
         clanID = (TextView) findViewById(R.id.clan);
         avatar = (ImageView) findViewById(R.id.imageView);
         Intent intented = getIntent();
-        String profNumber = intented.getStringExtra("storage");
+        profNumber = intented.getStringExtra("storage");
         if(savedInstanceState != null){
             userSave = savedInstanceState.getString("UserSave");
             profileSave = savedInstanceState.getString("ProfileSave");
@@ -47,6 +47,10 @@ public class MyActivity extends Activity {
         }
         else
             new ProfileTask().execute();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -120,6 +124,12 @@ public class MyActivity extends Activity {
             }
         }
     }
+    private void bootface(){
+        Intent boot;
+        boot = new Intent (this, Login.class);
+        boot.putExtra("wuzzat", "Your Steam ID was invalid.");
+        startActivity(boot);
+    }
     private class imageTask extends AsyncTask<Void, Integer, Void> {
         Drawable avatar2;
         @Override
@@ -129,7 +139,7 @@ public class MyActivity extends Activity {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
-                        "4321147&steamids=76561198046688891");
+                        "4321147&steamids=" + profNumber);
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
@@ -144,6 +154,7 @@ public class MyActivity extends Activity {
                 avatar2 = Drawable.createFromStream(avatarURL.openStream(), "Picture");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                bootface();
             } catch (JSONException e) {
                 e.printStackTrace();
             } catch (IOException e) {
