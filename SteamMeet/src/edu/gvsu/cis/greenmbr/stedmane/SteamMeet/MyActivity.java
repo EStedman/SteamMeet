@@ -2,11 +2,11 @@ package edu.gvsu.cis.greenmbr.stedmane.SteamMeet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,10 +19,11 @@ import java.util.Scanner;
 
 public class MyActivity extends Activity {
     // Called when the activity is first created.
-    TextView profile, user, clanID, state;
-    String userSave, profileSave, clanSave, stateSave;
-    ImageView avatar;
+    private TextView profile, user, clanID, state;
+    private String userSave, profileSave, clanSave, stateSave;
+    private ImageView avatar;
     private String profNumber;
+    private Spinner eventOrProfile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class MyActivity extends Activity {
         state = (TextView) findViewById(R.id.activeState);
         clanID = (TextView) findViewById(R.id.clan);
         avatar = (ImageView) findViewById(R.id.imageView);
+        //eventOrProfile = (Spinner)
         Intent intented = getIntent();
         profNumber = intented.getStringExtra("storage");
         if(savedInstanceState != null){
@@ -49,6 +51,7 @@ public class MyActivity extends Activity {
         else
             new ProfileTask().execute();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
