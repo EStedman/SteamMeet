@@ -9,12 +9,11 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
         <ImageView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/imageView"
-                   android:layout_alignParentTop="false" android:layout_centerHorizontal="true"
-                   android:layout_alignParentEnd="false"
-                   android:layout_alignParentStart="false" android:baselineAlignBottom="false"
-
-                   android:layout_marginTop="30dp"
-                   android:layout_alignBottom="@+id/persona" android:paddingBottom="30dp" android:cropToPadding="true"/>
+                  android:layout_alignParentTop="false" android:layout_centerHorizontal="true"
+                  android:layout_alignParentEnd="false"
+                  android:layout_alignParentStart="false" android:baselineAlignBottom="false"
+                  android:layout_marginTop="30dp"
+                  android:layout_alignBottom="@+id/persona" android:paddingBottom="30dp" android:cropToPadding="true"/>
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:textAppearance="?android:attr/textAppearanceMedium" android:text="User Name:"
                   android:id="@+id/persona" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
@@ -32,5 +31,11 @@
                   android:textAppearance="?android:attr/textAppearanceMedium" android:text="State: 0-5"
                   android:id="@+id/activeState" android:layout_centerHorizontal="true"
                   android:layout_marginTop="400dp"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Event's"
+                android:id="@+id/toEvents" android:layout_centerHorizontal="true"
+                android:layout_marginTop="450dp"/>
     </RelativeLayout>
 </LinearLayout>
