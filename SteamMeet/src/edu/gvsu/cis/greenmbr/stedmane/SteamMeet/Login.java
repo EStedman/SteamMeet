@@ -18,7 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -51,6 +51,7 @@ public class Login extends Activity implements View.OnClickListener{
         main = (Button) findViewById(R.id.button2);
         explain.setOnClickListener(this);
         main.setOnClickListener(this);
+
         SharedPreferences settings = getSharedPreferences(PREFS, 0);
         String prof = settings.getString("storage", null);
         input.setText(prof);
@@ -88,6 +89,17 @@ public class Login extends Activity implements View.OnClickListener{
                 e.printStackTrace();
             }
             if(arr != null){
+                FileOutputStream fos = null;
+                try {
+                    fos = openFileOutput(PREFS, Context.MODE_PRIVATE);
+                    fos.write(storage.getBytes());
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 SharedPreferences prof = getSharedPreferences(PREFS, 0);
                 SharedPreferences.Editor editor = prof.edit();
                 editor.putString("profnum", storage);
