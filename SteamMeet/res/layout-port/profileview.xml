@@ -35,7 +35,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Event's"
-                android:id="@+id/toEvents" android:layout_centerHorizontal="true"
-                android:layout_marginTop="450dp"/>
+                android:id="@+id/toEvents"
+                android:layout_marginTop="24dp" android:layout_below="@+id/activeState"
+                android:layout_toLeftOf="@+id/activeState"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Link E-Mail"
+                android:id="@+id/link" android:layout_alignTop="@+id/toEvents"
+                android:layout_toRightOf="@+id/activeState"/>
     </RelativeLayout>
 </LinearLayout>
