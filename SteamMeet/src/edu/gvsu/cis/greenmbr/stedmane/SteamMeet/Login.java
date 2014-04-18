@@ -54,6 +54,7 @@ public class Login extends Activity implements View.OnClickListener{
         SharedPreferences settings = getSharedPreferences(PREFS, 0);
         String prof = settings.getString("storage", null);
         input.setText(prof);
+        //
     }
     @Override
     protected void onResume() {
