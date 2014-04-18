@@ -128,12 +128,6 @@ public class MyActivity extends Activity {
             }
         }
     }
-    private void bootface(){
-        Intent boot;
-        boot = new Intent (this, Login.class);
-        boot.putExtra("wuzzat", "Your Steam ID was invalid.");
-        startActivity(boot);
-    }
     private class imageTask extends AsyncTask<Void, Integer, Void> {
         Drawable avatar2;
         @Override
@@ -158,13 +152,10 @@ public class MyActivity extends Activity {
                 avatar2 = Drawable.createFromStream(avatarURL.openStream(), "Picture");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-                bootface();
             } catch (JSONException e) {
                 e.printStackTrace();
-                bootface();
             } catch (IOException e) {
                 e.printStackTrace();
-                bootface();
             }
             return null;
         }

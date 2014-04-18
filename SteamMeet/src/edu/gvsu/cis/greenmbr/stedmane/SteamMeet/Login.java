@@ -40,11 +40,6 @@ public class Login extends Activity implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
-            Toast toast = Toast.makeText(getApplicationContext(), savedInstanceState.getString("wuzzat"), 3);
-            toast.show();
-        }
-
         setContentView(R.layout.login);
         input = (EditText) findViewById(R.id.editText);
         explain = (Button) findViewById(R.id.button);
@@ -53,7 +48,9 @@ public class Login extends Activity implements View.OnClickListener{
         main.setOnClickListener(this);
         SharedPreferences settings = getSharedPreferences(PREFS, 0);
         String prof = settings.getString("storage", null);
-        input.setText(prof);
+        if(!prof.equals(null)){
+            input.setText(prof);
+        }
     }
     @Override
     protected void onResume() {
