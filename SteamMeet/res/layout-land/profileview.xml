@@ -28,8 +28,14 @@
                   android:textAppearance="?android:attr/textAppearanceMedium" android:text="State: 0-5"
                   android:id="@+id/activeState" android:layout_centerHorizontal="true"
                   android:layout_marginTop="250dp"/>
-        <Spinner android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/spinner"
-                 android:visibility="visible"
-                 android:layout_alignParentTop="true" android:layout_alignStart="@+id/imageView"/>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Event's"
+                android:id="@+id/toEvents" android:layout_alignTop="@+id/persona"
+                android:layout_toRightOf="@+id/profileSite" android:layout_marginLeft="66dp"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Link E-Mail"
+                android:id="@+id/link" android:layout_below="@+id/profileSite"
+                android:layout_alignStart="@+id/toEvents"/>
     </RelativeLayout>
 </LinearLayout>

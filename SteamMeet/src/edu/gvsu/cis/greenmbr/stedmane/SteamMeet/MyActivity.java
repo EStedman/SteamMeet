@@ -22,7 +22,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
     private String userSave, profileSave, clanSave, stateSave;
     private ImageView avatar;
     private String profNumber;
-    private Button eventButton;
+    private Button eventButton, linkEmail;
     //private Spinner eventOrProfile;
 
     @Override
@@ -35,10 +35,11 @@ public class MyActivity extends Activity implements View.OnClickListener {
         clanID = (TextView) findViewById(R.id.clan);
         avatar = (ImageView) findViewById(R.id.imageView);
         eventButton = (Button) findViewById(R.id.toEvents);
+        linkEmail = (Button) findViewById(R.id.link);
         Intent intented = getIntent();
         profNumber = intented.getStringExtra("storage");
         eventButton.setOnClickListener(this);
-
+        linkEmail.setOnClickListener(this);
         /*If have time to finish spinner
 
         eventOrProfile = (Spinner) findViewById(R.id.spinner);
@@ -83,6 +84,10 @@ public class MyActivity extends Activity implements View.OnClickListener {
         if(v == eventButton){
             Intent toEvents = new Intent(this, EventsMain.class);
             startActivity(toEvents);
+        }
+        if(v == linkEmail){
+            Intent toEmail = new Intent(this, EmailLogin.class);
+            startActivity(toEmail);
         }
     }
 
