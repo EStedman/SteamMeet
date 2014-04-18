@@ -60,19 +60,17 @@ public class MyActivity extends Activity {
         outState.putString("ProfileSave", profile.getText().toString());
         outState.putString("ClanSave", clanID.getText().toString());
         outState.putString("StateSave", state.getText().toString());
-        // push baby push
     }
     private class ProfileTask extends AsyncTask<Void, Integer, JSONObject> {
         private Drawable avatarImg;
         @Override
         protected JSONObject doInBackground(Void... params) {
-            URL profileURL = null;
+            URL profileURL;
             try {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
                         "4321147&steamids=" + profNumber);
-
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
@@ -137,7 +135,7 @@ public class MyActivity extends Activity {
         Drawable avatar2;
         @Override
         protected Void doInBackground(Void... params) {
-            URL profileURL = null;
+            URL profileURL;
             try {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
@@ -160,8 +158,10 @@ public class MyActivity extends Activity {
                 bootface();
             } catch (JSONException e) {
                 e.printStackTrace();
+                bootface();
             } catch (IOException e) {
                 e.printStackTrace();
+                bootface();
             }
             return null;
         }
