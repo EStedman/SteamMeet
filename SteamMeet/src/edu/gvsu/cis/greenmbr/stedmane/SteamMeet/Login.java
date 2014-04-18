@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -30,6 +31,7 @@ import java.util.Scanner;
 public class Login extends Activity implements View.OnClickListener{
     EditText input;
     Button explain, main;
+    Drawable avatar2 = null;
     public static final String PREFS = "MyPrefsFile";
 
     @Override
@@ -40,11 +42,6 @@ public class Login extends Activity implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
-            Toast toast = Toast.makeText(getApplicationContext(), savedInstanceState.getString("wuzzat"), 3);
-            toast.show();
-        }
-
         setContentView(R.layout.login);
         input = (EditText) findViewById(R.id.editText);
         explain = (Button) findViewById(R.id.button);
@@ -52,70 +49,78 @@ public class Login extends Activity implements View.OnClickListener{
         explain.setOnClickListener(this);
         main.setOnClickListener(this);
 
-        SharedPreferences settings = this.getSharedPreferences(PREFS, 0);
+        /*SharedPreferences settings = this.getSharedPreferences(PREFS, 0);
         String prof = settings.getString("storage", null);
-        input.setText(prof);
-        //
+        input.setText(prof); */
+
     }
     @Override
     protected void onResume() {
         super.onResume();
     }
+
     @Override
     public void onClick(View v) {
         if (v == main){
-            String storage = input.getText().toString();
+            new imageTask().execute();
+            if(avatar2 == null){
+                Toast toast = Toast.makeText(getApplicationContext(), "Invalid ID", 3);
+                toast.show();
+            }
+            else{
+                String storage = input.getText().toString();
+                /*SharedPreferences prof = this.getSharedPreferences(PREFS, 0);
+                SharedPreferences.Editor editor = prof.edit();
+                editor.putString("profnum", storage);
+                editor.commit(); */
+                Intent toMain = new Intent(this, MyActivity.class);
+                toMain.putExtra("storage", storage);
+                startActivity(toMain);
+            }
+
+        }
+        if (v == explain){
+            Intent toExplain = new Intent(this, Explain.class);
+            startActivity(toExplain);
+        }
+    }
+    private class imageTask extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
             URL profileURL;
-            String out = "";
-            JSONObject arr = null;
+            String storage = input.getText().toString();
             try {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
                         "4321147&steamids=" + storage);
+                String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
-                if(!scan.hasNextLine())
-
                 while (scan.hasNextLine()) {
                     out += scan.nextLine();
                 }
-                arr = new JSONObject(out);
+                JSONObject arr = new JSONObject(out);
+                JSONArray obj = (arr.getJSONObject("response")).getJSONArray("players");
+                JSONObject profileObj = obj.getJSONObject(0);
+                String avatarString = profileObj.getString("avatarfull");
+                URL avatarURL = new URL(avatarString);
+                avatar2 = Drawable.createFromStream(avatarURL.openStream(), "Picture");
             } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+                avatar2 = null;
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
+                avatar2 = null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                avatar2 = null;
             }
-            if(arr != null){
-                FileOutputStream fos = null;
-                try {
-                    fos = openFileOutput(PREFS, Context.MODE_PRIVATE);
-                    fos.write(storage.getBytes());
-                    fos.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                SharedPreferences prof = getSharedPreferences(PREFS, 0);
-                SharedPreferences.Editor editor = prof.edit();
-                editor.putString("profnum", storage);
-                editor.commit();
-                Intent toMain = new Intent(this, MyActivity.class);
-                toMain.putExtra("storage", storage);
-                startActivity(toMain);
-            }
-            else{
-                Toast toast = Toast.makeText(getApplicationContext(), "Invalid ID", 3);
-                toast.show();
-            }
+            return null;
         }
-        if (v == explain){
-            Intent toExplain = new Intent(this, Explain.class);
-            startActivity(toExplain);
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
         }
     }
 }

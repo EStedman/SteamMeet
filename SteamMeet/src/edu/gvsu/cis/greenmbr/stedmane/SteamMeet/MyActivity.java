@@ -116,7 +116,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
                 profileURL = new URL("http://api.steampowered.com/" +
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
-                        "4321147&steamids=" + "76561198046688891");//profNumber
+                        "4321147&steamids=" + profNumber);
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
