@@ -52,7 +52,7 @@ public class Login extends Activity implements View.OnClickListener{
         explain.setOnClickListener(this);
         main.setOnClickListener(this);
 
-        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        SharedPreferences settings = this.getSharedPreferences(PREFS, 0);
         String prof = settings.getString("storage", null);
         input.setText(prof);
         //
