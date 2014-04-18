@@ -60,6 +60,7 @@ public class MyActivity extends Activity {
         outState.putString("ProfileSave", profile.getText().toString());
         outState.putString("ClanSave", clanID.getText().toString());
         outState.putString("StateSave", state.getText().toString());
+        // push baby push
     }
     private class ProfileTask extends AsyncTask<Void, Integer, JSONObject> {
         private Drawable avatarImg;
