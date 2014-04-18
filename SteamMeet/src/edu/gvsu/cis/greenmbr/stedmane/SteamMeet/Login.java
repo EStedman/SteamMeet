@@ -44,6 +44,7 @@ public class Login extends Activity implements View.OnClickListener{
             Toast toast = Toast.makeText(getApplicationContext(), savedInstanceState.getString("wuzzat"), 3);
             toast.show();
         }
+
         setContentView(R.layout.login);
         input = (EditText) findViewById(R.id.editText);
         explain = (Button) findViewById(R.id.button);
