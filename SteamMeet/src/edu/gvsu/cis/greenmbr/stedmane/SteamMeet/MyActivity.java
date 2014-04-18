@@ -2,6 +2,7 @@ package edu.gvsu.cis.greenmbr.stedmane.SteamMeet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,6 +71,7 @@ public class MyActivity extends Activity {
                         "ISteamUser/GetPlayerSummaries/v00" +
                         "02/?key=A35259FADACBD1E99D1101AD8" +
                         "4321147&steamids=" + profNumber);
+
                 String out = "";
                 HttpURLConnection conn = (HttpURLConnection) profileURL.openConnection();
                 Scanner scan = new Scanner(conn.getInputStream());
