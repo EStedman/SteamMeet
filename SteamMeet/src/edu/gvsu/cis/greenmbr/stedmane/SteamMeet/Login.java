@@ -48,10 +48,9 @@ public class Login extends Activity implements View.OnClickListener{
         main = (Button) findViewById(R.id.button2);
         explain.setOnClickListener(this);
         main.setOnClickListener(this);
-
-        /*SharedPreferences settings = this.getSharedPreferences(PREFS, 0);
-        String prof = settings.getString("storage", null);
-        input.setText(prof); */
+        SharedPreferences settings = this.getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String prof = settings.getString("profnum", null);
+        input.setText(prof);
 
     }
     @Override
@@ -62,22 +61,16 @@ public class Login extends Activity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (v == main){
-            new imageTask().execute();
-            if(avatar2 == null){
                 Toast toast = Toast.makeText(getApplicationContext(), "Invalid ID", 3);
                 toast.show();
-            }
-            else{
                 String storage = input.getText().toString();
-                /*SharedPreferences prof = this.getSharedPreferences(PREFS, 0);
+                SharedPreferences prof = this.getSharedPreferences(PREFS, 0);
                 SharedPreferences.Editor editor = prof.edit();
                 editor.putString("profnum", storage);
-                editor.commit(); */
+                editor.commit();
                 Intent toMain = new Intent(this, MyActivity.class);
                 toMain.putExtra("storage", storage);
                 startActivity(toMain);
-            }
-
         }
         if (v == explain){
             Intent toExplain = new Intent(this, Explain.class);
