@@ -4,13 +4,37 @@
           android:versionCode="1"
           android:versionName="1.0">
 
+    <service android:name="com.parse.PushService" />
+    <receiver android:name="com.parse.ParseBroadcastReceiver">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" />
+            <action android:name="android.intent.action.USER_PRESENT" />
+        </intent-filter>
+    </receiver>
+    <receiver android:name="com.parse.GcmBroadcastReceiver"
+              android:permission="com.google.android.c2dm.permission.SEND">
+    <intent-filter>
+    <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+    <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <category android:name="edu.gvsu.cis.greenmbr.stedmane.SteamMeet" />
+    </intent-filter>
+    </receiver>
+
     <uses-sdk android:minSdkVersion="17"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <permission android:protectionLevel="signature"
+                android:name="edu.gvsu.cis.greenmbr.stedmane.SteamMeet.permission.C2D_MESSAGE" />
+    <uses-permission android:name="edu.gvsu.cis.greenmbr.stedmane.SteamMeet.permission.C2D_MESSAGE" />
     <uses-feature
             android:glEsVersion="0x00020000"
             android:required="true"/>
@@ -24,7 +48,8 @@
         </activity>
         <activity android:name="Explain"></activity>
         <activity android:name="MyActivity"></activity>
-        <activity android:name="EventsMain"/>
+        <activity android:name="EventsMain"></activity>
+        <activity android:name="EmailLogin"></activity>
         <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="2" />

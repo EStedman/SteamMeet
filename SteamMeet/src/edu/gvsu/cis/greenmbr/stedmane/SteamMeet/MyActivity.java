@@ -19,7 +19,8 @@ import java.util.Scanner;
 public class MyActivity extends Activity implements View.OnClickListener {
     // Called when the activity is first created.
     private TextView profile, user, clanID, state;
-    private String userSave, profileSave, clanSave, stateSave;
+    private String userSave, profileSave, clanSave, stateSave,
+                   profSave;
     private ImageView avatar;
     private String profNumber;
     private Button eventButton, linkEmail;
@@ -55,6 +56,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
             profileSave = savedInstanceState.getString("ProfileSave");
             clanSave = savedInstanceState.getString("ClanSave");
             stateSave = savedInstanceState.getString("StateSave");
+            profNumber = savedInstanceState.getString("ProfSave");
             user.setText(userSave);
             profile.setText(profileSave);
             clanID.setText(clanSave);
@@ -77,6 +79,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
         outState.putString("ProfileSave", profile.getText().toString());
         outState.putString("ClanSave", clanID.getText().toString());
         outState.putString("StateSave", state.getText().toString());
+        outState.putString("ProfSave", profNumber);
     }
 
     @Override
@@ -87,6 +90,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
         }
         if(v == linkEmail){
             Intent toEmail = new Intent(this, EmailLogin.class);
+            toEmail.putExtra("storage", profNumber);
             startActivity(toEmail);
         }
     }
