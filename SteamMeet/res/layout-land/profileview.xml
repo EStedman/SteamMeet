@@ -35,7 +35,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Link E-Mail"
-                android:id="@+id/link" android:layout_below="@+id/profileSite"
-                android:layout_alignStart="@+id/toEvents"/>
+                android:id="@+id/link"
+                android:layout_alignTop="@+id/emailText" android:layout_alignStart="@+id/toEvents"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create\nEvent"
+                android:id="@+id/create"
+                android:layout_below="@+id/profileSite" android:layout_alignStart="@+id/link"/>
     </RelativeLayout>
 </LinearLayout>

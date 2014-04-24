@@ -24,7 +24,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
                    emailSave;
     private ImageView avatar;
     private String profNumber, emailAddress, emailPreference;
-    private Button eventButton, linkEmail;
+    private Button eventButton, linkEmail, createEvent;
     public static final String PREFS2 = "MyPrefsFile2";
 
     @Override
@@ -37,12 +37,14 @@ public class MyActivity extends Activity implements View.OnClickListener {
         emailText = (TextView) findViewById(R.id.emailText);
         avatar = (ImageView) findViewById(R.id.imageView);
         eventButton = (Button) findViewById(R.id.toEvents);
+        createEvent = (Button) findViewById(R.id.create);
         linkEmail = (Button) findViewById(R.id.link);
         Intent intented = getIntent();
         profNumber = intented.getStringExtra("storage");
         emailAddress = intented.getStringExtra("emailAddress");
         eventButton.setOnClickListener(this);
         linkEmail.setOnClickListener(this);
+        createEvent.setOnClickListener(this);
         if(emailAddress != null){
             SharedPreferences emailLink = this.getSharedPreferences(PREFS2, 0);
             SharedPreferences.Editor editor = emailLink.edit();
@@ -98,6 +100,11 @@ public class MyActivity extends Activity implements View.OnClickListener {
             Intent toEmail = new Intent(this, EmailLogin.class);
             toEmail.putExtra("storage", profNumber);
             startActivity(toEmail);
+        }
+        if(v == createEvent){
+            Intent toCreate = new Intent(this, CreatePlaces.class);
+            toCreate.putExtra("Email", emailAddress);
+            toCreate.putExtra("storage", profNumber);
         }
     }
 

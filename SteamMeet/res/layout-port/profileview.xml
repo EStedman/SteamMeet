@@ -44,5 +44,11 @@
                 android:text="Link E-Mail"
                 android:id="@+id/link" android:layout_alignTop="@+id/toEvents"
                 android:layout_toRightOf="@+id/activeState"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create\nEvent"
+                android:id="@+id/create"
+                android:layout_alignTop="@+id/toEvents" android:layout_alignEnd="@+id/activeState"/>
     </RelativeLayout>
 </LinearLayout>
