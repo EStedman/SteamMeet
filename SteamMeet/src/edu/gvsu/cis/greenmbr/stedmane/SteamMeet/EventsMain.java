@@ -86,7 +86,7 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
         detailIntent.putExtra("id", targetId);
         startActivity(detailIntent); */
     }
-
+//
     private class eventsTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
