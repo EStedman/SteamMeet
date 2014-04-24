@@ -2,6 +2,7 @@ package edu.gvsu.cis.greenmbr.stedmane.SteamMeet;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.*;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 import com.parse.Parse;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 
 /**
@@ -20,13 +22,16 @@ import com.parse.ParseObject;
 public class CreatePlaces extends Activity implements View.OnClickListener{
     EditText input;
     Button button;
-
+    String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_setup);
         button = (Button) findViewById(R.id.button);
         input = (EditText) findViewById(R.id.editText);
+        Intent intented = getIntent();
+        email = intented.getStringExtra("emailaddress");
+
         /*
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
@@ -59,8 +64,12 @@ public class CreatePlaces extends Activity implements View.OnClickListener{
     */
     public void onClick(View v) {
         if (v == button){
-            ParseObject placeObject = new ParseObject("place");
-            placeObject.put("email", "filler");
+            ParseObject placeObject = new ParseObject("Place");
+            placeObject.put("emailaddress", email);
+            placeObject.put("placename", input.getText());
+            placeObject.saveInBackground();
+            //TODO: get and store GPS location. transfer back to main menu?
+
         }
     }
 }
