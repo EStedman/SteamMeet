@@ -8,14 +8,14 @@
                 android:layout_width="127dp"
                 android:layout_height="37dp"
                 android:text="Enter Steam ID:"
-                android:id="@+id/textView" android:textSize="18dp" android:layout_alignParentTop="true"
+                android:id="@+id/idEntry" android:textSize="18dp" android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"/>
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="What's that?"
                 android:id="@+id/button"
-                android:layout_below="@+id/textView" android:layout_alignRight="@+id/textView"
+                android:layout_below="@+id/idEntry" android:layout_alignRight="@+id/idEntry"
                 android:layout_marginTop="22dp"/>
         <EditText
                 android:layout_width="wrap_content"
@@ -29,9 +29,21 @@
         <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirm"
-                android:id="@+id/button2" android:layout_gravity="center_horizontal"
+                android:text="Test ID"
+                android:id="@+id/test" android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/editText" android:layout_centerHorizontal="true"
                 android:layout_marginTop="28dp"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:id="@+id/confirm" android:layout_below="@+id/test" android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/note" android:layout_alignParentTop="true" android:layout_toRightOf="@+id/idEntry"
+            />
 </RelativeLayout>
 

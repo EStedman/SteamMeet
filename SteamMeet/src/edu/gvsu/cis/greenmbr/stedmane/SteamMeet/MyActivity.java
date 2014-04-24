@@ -2,6 +2,7 @@ package edu.gvsu.cis.greenmbr.stedmane.SteamMeet;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,10 +21,11 @@ public class MyActivity extends Activity implements View.OnClickListener {
     // Called when the activity is first created.
     private TextView profile, user, clanID, state;
     private String userSave, profileSave, clanSave, stateSave,
-                   profSave;
+                   emailSave;
     private ImageView avatar;
-    private String profNumber;
+    private String profNumber, emailAddress, emailPreference;
     private Button eventButton, linkEmail;
+    public static final String PREFS2 = "MyPrefsFile2";
     //private Spinner eventOrProfile;
 
     @Override
@@ -39,8 +41,20 @@ public class MyActivity extends Activity implements View.OnClickListener {
         linkEmail = (Button) findViewById(R.id.link);
         Intent intented = getIntent();
         profNumber = intented.getStringExtra("storage");
+        emailAddress = intented.getStringExtra("emailAddress");
         eventButton.setOnClickListener(this);
         linkEmail.setOnClickListener(this);
+        if(emailAddress != null){
+            SharedPreferences emailLink = this.getSharedPreferences(PREFS2, 0);
+            SharedPreferences.Editor editor = emailLink.edit();
+            editor.putString("emailLink", emailAddress);
+            editor.commit();
+        }
+        SharedPreferences settings = this.getSharedPreferences(PREFS2, 0);
+        emailPreference = settings.getString("emailAddress", null);
+        if(emailPreference != null){
+            linkEmail.setVisibility(-1);
+        }
         /*If have time to finish spinner
 
         eventOrProfile = (Spinner) findViewById(R.id.spinner);
@@ -52,7 +66,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
         */
 
         if(savedInstanceState != null){
-            userSave = savedInstanceState.getString("UserSave");
+            userSave = savedInstanceState.getString("EmailLink");
             profileSave = savedInstanceState.getString("ProfileSave");
             clanSave = savedInstanceState.getString("ClanSave");
             stateSave = savedInstanceState.getString("StateSave");
@@ -80,12 +94,15 @@ public class MyActivity extends Activity implements View.OnClickListener {
         outState.putString("ClanSave", clanID.getText().toString());
         outState.putString("StateSave", state.getText().toString());
         outState.putString("ProfSave", profNumber);
+        outState.putString("EmailLink", emailAddress);
     }
 
     @Override
     public void onClick(View v) {
         if(v == eventButton){
             Intent toEvents = new Intent(this, EventsMain.class);
+            toEvents.putExtra("storage", profNumber);
+            toEvents.putExtra("emailAddress", emailAddress);
             startActivity(toEvents);
         }
         if(v == linkEmail){

@@ -13,5 +13,5 @@
           android:text="1. Find your Steam community page URL. Using Google to search for &quot;Steam + '(your steam name)'&quot; is a good way of doing this. \n 2. If the URL has a number at the end, enter that number into the previous page. If it does not, continue."
           android:id="@+id/textView2" android:textSize="14dp"/>
 <TextView android:id="@+id/textView3" android:layout_width="fill_parent" android:layout_height="130dp"
-          android:text='3. Enter the whole URL from step 2 into the site "steamfinderid.com" and hit the search button. 4. Enter the output from step 3 as the input for another search. \n 5. The output from step 4 will be your steam ID. Return to the previous page.'/>
+          android:text='3. Enter the whole URL from step 2 into the site "steamfinderid.com" and hit the search button. \n4. Enter the output from step 3 as the input for another search. \n 5. The output from step 4 will be your steam ID. Return to the previous page.'/>
 </LinearLayout>

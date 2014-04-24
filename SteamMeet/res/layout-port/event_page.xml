@@ -5,8 +5,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <EditText
-            android:layout_width="fill_parent"
+    <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText" android:layout_gravity="center_horizontal"/>
+            android:text="hey"
+            android:id="@+id/hey" android:layout_gravity="center_horizontal"/>
 </LinearLayout>

@@ -9,8 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
+import com.parse.*;
+
 /**
  * Created by Evan on 4/18/14.
  */
@@ -24,11 +24,15 @@ public class EmailLogin extends Activity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.email_login);
+        /*
+        Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg", "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
+        PushService.setDefaultPushCallback(this, EmailLogin.class);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+        */
         emailTitle = (TextView) findViewById(R.id.emailTitle);
         emailWarning = (TextView) findViewById(R.id.emailWarning);
         emailEnter = (EditText) findViewById(R.id.emailEnter);
         emailConfirm = (Button) findViewById(R.id.emailConfirm);
-
         emailConfirm.setOnClickListener(this);
     }
 
@@ -36,7 +40,11 @@ public class EmailLogin extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if(v == emailConfirm){
             String address = emailEnter.getText().toString();
+            Intent store = getIntent();
+            String storage = store.getStringExtra("storage");
             Intent toMain = new Intent(this, MyActivity.class);
+            toMain.putExtra("storage", storage);
+            toMain.putExtra("emailAddress", address);
             startActivity(toMain);
         }
     }
