@@ -19,14 +19,13 @@ import java.util.Scanner;
 
 public class MyActivity extends Activity implements View.OnClickListener {
     // Called when the activity is first created.
-    private TextView profile, user, clanID, state;
+    private TextView profile, user, emailText, state;
     private String userSave, profileSave, clanSave, stateSave,
                    emailSave;
     private ImageView avatar;
     private String profNumber, emailAddress, emailPreference;
     private Button eventButton, linkEmail;
     public static final String PREFS2 = "MyPrefsFile2";
-    //private Spinner eventOrProfile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +34,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
         user = (TextView) findViewById(R.id.persona);
         profile = (TextView) findViewById(R.id.profileSite);
         state = (TextView) findViewById(R.id.activeState);
-        clanID = (TextView) findViewById(R.id.clan);
+        emailText = (TextView) findViewById(R.id.emailText);
         avatar = (ImageView) findViewById(R.id.imageView);
         eventButton = (Button) findViewById(R.id.toEvents);
         linkEmail = (Button) findViewById(R.id.link);
@@ -47,33 +46,24 @@ public class MyActivity extends Activity implements View.OnClickListener {
         if(emailAddress != null){
             SharedPreferences emailLink = this.getSharedPreferences(PREFS2, 0);
             SharedPreferences.Editor editor = emailLink.edit();
-            editor.putString("emailLink", emailAddress);
+            editor.putString("emailPref", emailAddress);
             editor.commit();
         }
         SharedPreferences settings = this.getSharedPreferences(PREFS2, 0);
-        emailPreference = settings.getString("emailAddress", null);
+        emailPreference = settings.getString("emailPref", null);
         if(emailPreference != null){
+            emailText.setText("E-Mail: " + emailPreference);
             linkEmail.setVisibility(-1);
         }
-        /*If have time to finish spinner
-
-        eventOrProfile = (Spinner) findViewById(R.id.spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.spinner_items, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        eventOrProfile.setAdapter(adapter);
-        eventOrProfile.setOnItemSelectedListener(this);
-        */
-
         if(savedInstanceState != null){
-            userSave = savedInstanceState.getString("EmailLink");
+            userSave = savedInstanceState.getString("UserSave");
             profileSave = savedInstanceState.getString("ProfileSave");
-            clanSave = savedInstanceState.getString("ClanSave");
             stateSave = savedInstanceState.getString("StateSave");
             profNumber = savedInstanceState.getString("ProfSave");
+            emailSave = savedInstanceState.getString("EmailLink");
             user.setText(userSave);
             profile.setText(profileSave);
-            clanID.setText(clanSave);
+            emailText.setText(emailSave);
             state.setText(stateSave);
             new imageTask().execute();
         }
@@ -91,10 +81,9 @@ public class MyActivity extends Activity implements View.OnClickListener {
         super.onSaveInstanceState(outState);
         outState.putString("UserSave", user.getText().toString());
         outState.putString("ProfileSave", profile.getText().toString());
-        outState.putString("ClanSave", clanID.getText().toString());
         outState.putString("StateSave", state.getText().toString());
         outState.putString("ProfSave", profNumber);
-        outState.putString("EmailLink", emailAddress);
+        outState.putString("EmailLink", emailText.getText().toString());
     }
 
     @Override
@@ -111,27 +100,6 @@ public class MyActivity extends Activity implements View.OnClickListener {
             startActivity(toEmail);
         }
     }
-
-    /*Part of spinner
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        String selectedItem = parent.getItemAtPosition(pos).toString();
-        if("Events".equalsIgnoreCase(selectedItem)){
-            Intent eventPass = new Intent(this, EventsMain.class);
-            startActivity(eventPass);
-        }
-        if("Profile".equalsIgnoreCase(selectedItem)){
-            Intent profilePass = new Intent(this, MyActivity.class);
-            startActivity(profilePass);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-        setContentView(R.layout.profileview);
-    }
-    */
 
     private class ProfileTask extends AsyncTask<Void, Integer, JSONObject> {
         private Drawable avatarImg;
@@ -177,7 +145,6 @@ public class MyActivity extends Activity implements View.OnClickListener {
 
                 user.setText("User Name: " + userTemp);
                 profile.setText("Steam Profile: " + profTemp);
-                clanID.setText("Clan ID: " + clanTemp);
                 if (stateTemp == 1)
                     state.setText("State: Online");
                 else if (stateTemp == 2) {
