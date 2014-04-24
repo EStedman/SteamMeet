@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.parse.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,10 +23,16 @@ import java.util.Map;
 /**
  * Created by Evan on 4/18/14.
  */
-public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder{
+public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder, LocationListener,
+        GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener{
     private ArrayList<Map<String, Object>> nearbyEvents;
     private SimpleAdapter eventsAdapter;
     private final double MAX_DISTANCE = 30;
+    private LocationClient mapClient;
+    private Location myLoc;
+    private ParseGeoPoint myGeoLoc;
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -37,6 +45,8 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg",
+                "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
         View header = getLayoutInflater().inflate(R.layout.event_header, null);
         ListView listview = getListView();
         listview.addHeaderView(header);
@@ -45,13 +55,28 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
                 this,
                 nearbyEvents,                            /* data source */
                 R.layout.event_page,   /* builtin layout of 2 textviews */
-                new String[]{"placename", "emailaddress", "img_icon_url"},
+                new String[]{"placeName", "emailAddress", "img_icon_url"},
                 /* how arraylist contents are mapped onto the view layout */
                 new int[]{R.id.main_text, R.id.sub_text, R.id.img}
         );
         setListAdapter(eventsAdapter);
         eventsAdapter.setViewBinder(this);
+        mapClient = new LocationClient(this, this, this);
+        myLoc = mapClient.getLastLocation();
+        myGeoLoc = new ParseGeoPoint(myLoc.getLatitude(), myLoc.getLongitude());
         new eventsTask().execute();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mapClient != null)
+            mapClient.connect();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mapClient != null)
+            mapClient.disconnect(); /* disconnect when our app is invisible */
     }
 
     @Override
@@ -70,7 +95,7 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL  ,
-                new String[]{(String) nearbyEvents.get(position).get("emailaddress")});
+                new String[]{(String) nearbyEvents.get(position).get("emailAddress")});
         //i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
         //i.putExtra(Intent.EXTRA_TEXT   , "body of email");
         try {
@@ -86,22 +111,57 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
         detailIntent.putExtra("id", targetId);
         startActivity(detailIntent); */
     }
-//
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+    }
+
+    @Override
+    public void onDisconnected() {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
+    }
+
+    //
     private class eventsTask extends AsyncTask<Void, Integer, Void> {
 
         @Override
         protected Void doInBackground(Void... params) {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
-            query.whereWithinMiles("location", /* add geopoint */, MAX_DISTANCE);
+            query.whereWithinMiles("location", myGeoLoc, MAX_DISTANCE);
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> scoreList, ParseException e) {
-                    for(ParseObject a : scoreList){
+                for(ParseObject a : scoreList){
                         Map<String, Object> newPlace = new HashMap<String, Object>();
-                        newPlace.put("emailaddress", a.getString("emailaddress"));
-                        newPlace.put("placename", a.getString("placename"));
+                        newPlace.put("emailAddress", a.getString("emailAddress"));
+                        newPlace.put("placeName", a.getString("placeName"));
                         nearbyEvents.add(newPlace);
-                        //TODO: Add GPS awareness
-                    }
+                }
                 }
             });
             return null;

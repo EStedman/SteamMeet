@@ -103,8 +103,9 @@ public class MyActivity extends Activity implements View.OnClickListener {
         }
         if(v == createEvent){
             Intent toCreate = new Intent(this, CreatePlaces.class);
-            toCreate.putExtra("Email", emailAddress);
+            toCreate.putExtra("emailAddress", emailPreference);
             toCreate.putExtra("storage", profNumber);
+            startActivity(toCreate);
         }
     }
 
