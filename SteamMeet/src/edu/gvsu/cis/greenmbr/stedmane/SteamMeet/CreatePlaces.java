@@ -28,7 +28,6 @@ import com.parse.ParseObject;
  * Created by Brett on 4/18/14.
  */
 public class CreatePlaces extends Activity implements View.OnClickListener,
-
         LocationListener, GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener {
     private EditText input;
@@ -43,8 +42,8 @@ public class CreatePlaces extends Activity implements View.OnClickListener,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.place_setup);
-        Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg",
-                "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
+        //Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg",
+        //        "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
         newEvent = (Button) findViewById(R.id.newEvent);
         input = (EditText) findViewById(R.id.newTitle);
         newEvent.setOnClickListener(this);
@@ -80,6 +79,8 @@ public class CreatePlaces extends Activity implements View.OnClickListener,
             toMain = new Intent(this,MyActivity.class);
             toMain.putExtra("emailAddress", emailAddress);
             toMain.putExtra("storage", storage);
+            toMain.putExtra("lat", myGeoLoc.getLatitude());
+            toMain.putExtra("lon", myGeoLoc.getLongitude());
             startActivity(toMain);
         }
     }
@@ -91,7 +92,7 @@ public class CreatePlaces extends Activity implements View.OnClickListener,
 
     @Override
     public void onDisconnected() {
-
+        mapClient.disconnect();
     }
 
     @Override

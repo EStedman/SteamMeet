@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import com.google.android.gms.common.ConnectionResult;
@@ -23,15 +24,49 @@ import java.util.Map;
 /**
  * Created by Evan on 4/18/14.
  */
+
+
+/*
+public class EventsMain extends Activity {
+    TextView pull;
+    int size;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.testingpuller);
+        pull = (TextView)findViewById(R.id.testing1);
+        //Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg",
+        //        "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("place");
+        query.whereEqualTo("PlaceName", "fourth");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> placeList, ParseException e) {
+                if (e == null) {
+                    size = placeList.size();
+                    pull.setText(Integer.toString(size));
+                    Log.d("location", "emailAddress " + placeList.size());
+
+                } else {
+                    Log.d("location", "Error: " + e.getMessage());
+                }
+            }
+        });
+    } */
+
+
+
+
 public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder, LocationListener,
         GooglePlayServicesClient.ConnectionCallbacks,
         GooglePlayServicesClient.OnConnectionFailedListener{
     private ArrayList<Map<String, Object>> nearbyEvents;
     private SimpleAdapter eventsAdapter;
     private final double MAX_DISTANCE = 30;
-    private LocationClient mapClient;
+    private LocationClient mapClient2;
     private Location myLoc;
     private ParseGeoPoint myGeoLoc;
+    String email;
+    Intent intented;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -42,52 +77,45 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
     protected void onResume() {
         super.onResume();
     }
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg",
-                "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
         View header = getLayoutInflater().inflate(R.layout.event_header, null);
         ListView listview = getListView();
         listview.addHeaderView(header);
         nearbyEvents = new ArrayList<Map<String, Object>>();
+        intented = getIntent();
+        email = intented.getStringExtra("emailAddress");
         eventsAdapter = new SimpleAdapter(
                 this,
-                nearbyEvents,                            /* data source */
-                R.layout.event_page,   /* builtin layout of 2 textviews */
-                new String[]{"placeName", "emailAddress", "img_icon_url"},
-                /* how arraylist contents are mapped onto the view layout */
-                new int[]{R.id.main_text, R.id.sub_text, R.id.img}
+                nearbyEvents,
+                R.layout.event_page,
+                new String[]{"PlaceName", "EmailAddress"},
+                new int[]{R.id.main_text, R.id.sub_text}
         );
         setListAdapter(eventsAdapter);
         eventsAdapter.setViewBinder(this);
-        mapClient = new LocationClient(this, this, this);
-        myLoc = mapClient.getLastLocation();
-        myGeoLoc = new ParseGeoPoint(myLoc.getLatitude(), myLoc.getLongitude());
+        mapClient2 = new LocationClient(this, this, this);
+        /*
+        myLoc = mapClient2.getLastLocation();
+        myGeoLoc = new ParseGeoPoint(myLoc.getLatitude(), myLoc.getLongitude()); */
         new eventsTask().execute();
     }
     @Override
     protected void onStart() {
         super.onStart();
-        if (mapClient != null)
-            mapClient.connect();
+        if (mapClient2 != null)
+            mapClient2.connect();
     }
     @Override
     protected void onStop() {
         super.onStop();
-        if (mapClient != null)
-            mapClient.disconnect(); /* disconnect when our app is invisible */
+        if (mapClient2 != null)
+            mapClient2.disconnect(); /* disconnect when our app is invisible */
     }
 
-    @Override
-    public boolean setViewValue(View view, Object obj, String objInString) {
-        if (view.getId() == R.id.img) {
-            ImageView pic = (ImageView) view;
-            pic.setImageDrawable((Drawable) obj);
-            return true;
-        } else
-            return false;
-    }
+
+
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -110,6 +138,9 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
         Intent detailIntent = new Intent(this, Achievements.class);
         detailIntent.putExtra("id", targetId);
         startActivity(detailIntent); */
+
+
+
     }
 
     @Override
@@ -147,19 +178,27 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
 
     }
 
+    @Override
+    public boolean setViewValue(View view, Object data, String textRepresentation) {
+        return false;
+    }
+
     //
     private class eventsTask extends AsyncTask<Void, Integer, Void> {
-
         @Override
         protected Void doInBackground(Void... params) {
-            ParseQuery<ParseObject> query = ParseQuery.getQuery("Place");
-            query.whereWithinMiles("location", myGeoLoc, MAX_DISTANCE);
+            ParseObject sdf = null;
+            ParseGeoPoint loc = null;
+            loc = new ParseGeoPoint (intented.getDoubleExtra("lat", 0),
+            intented.getDoubleExtra("lon", 0));
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("place");
+            query.whereWithinMiles("location", loc, MAX_DISTANCE);
             query.findInBackground(new FindCallback<ParseObject>() {
                 public void done(List<ParseObject> scoreList, ParseException e) {
                 for(ParseObject a : scoreList){
                         Map<String, Object> newPlace = new HashMap<String, Object>();
-                        newPlace.put("emailAddress", a.getString("emailAddress"));
-                        newPlace.put("placeName", a.getString("placeName"));
+                        newPlace.put("EmailAddress", a.getString("EmailAddress"));
+                        newPlace.put("PlaceName", a.getString("PlaceName"));
                         nearbyEvents.add(newPlace);
                 }
                 }
@@ -168,7 +207,6 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
         }
         @Override
         protected void onPreExecute() {
-            setProgressBarIndeterminateVisibility(true);
         }
 
         @Override
@@ -178,4 +216,6 @@ public class EventsMain extends ListActivity implements SimpleAdapter.ViewBinder
         }
 
     }
+
 }
+

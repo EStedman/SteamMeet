@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
+import com.parse.Parse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +27,14 @@ public class MyActivity extends Activity implements View.OnClickListener {
     private String profNumber, emailAddress, emailPreference;
     private Button eventButton, linkEmail, createEvent;
     public static final String PREFS2 = "MyPrefsFile2";
+    private Intent intented;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profileview);
+        Parse.initialize(this, "2JUDU3NzfMd4QN1KY2HiKWFpAG9nSiAyeWM4aQNg",
+                "YZazw5idYfUiivovNxZFUezRSBznPGbmTlvYDkZW");
         user = (TextView) findViewById(R.id.persona);
         profile = (TextView) findViewById(R.id.profileSite);
         state = (TextView) findViewById(R.id.activeState);
@@ -39,7 +43,7 @@ public class MyActivity extends Activity implements View.OnClickListener {
         eventButton = (Button) findViewById(R.id.toEvents);
         createEvent = (Button) findViewById(R.id.create);
         linkEmail = (Button) findViewById(R.id.link);
-        Intent intented = getIntent();
+        intented = getIntent();
         profNumber = intented.getStringExtra("storage");
         emailAddress = intented.getStringExtra("emailAddress");
         eventButton.setOnClickListener(this);
@@ -93,7 +97,9 @@ public class MyActivity extends Activity implements View.OnClickListener {
         if(v == eventButton){
             Intent toEvents = new Intent(this, EventsMain.class);
             toEvents.putExtra("storage", profNumber);
-            toEvents.putExtra("emailAddress", emailAddress);
+            toEvents.putExtra("emailAddress", emailPreference);
+            toEvents.putExtra("lat", intented.getDoubleExtra("lat", 0));
+            toEvents.putExtra("lon", intented.getDoubleExtra("lon", 0));
             startActivity(toEvents);
         }
         if(v == linkEmail){
