@@ -20,7 +20,7 @@ import java.util.Scanner;
 public class MyActivity extends Activity implements View.OnClickListener {
     // Called when the activity is first created.
     private TextView profile, user, emailText, state;
-    private String userSave, profileSave, clanSave, stateSave,
+    private String userSave, profileSave, stateSave,
                    emailSave;
     private ImageView avatar;
     private String profNumber, emailAddress, emailPreference;
